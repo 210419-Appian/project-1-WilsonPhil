@@ -8,10 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Account;
+import com.revature.models.AccountStatus;
+import com.revature.models.AccountType;
 import com.revature.util.ConnectionUtil;
 
-public class AccountRepoImpl implements CrudRepo{
-
+public class AccountRepoImpl implements CrudRepo<Account>{
+	private static ReadRepo<AccountStatus> readstatus=new AccountStatusRepoImpl();
+	private static ReadRepo<AccountType> readtype=new AccountTypeRepoImpl();
+	
+	
 	@Override
 	public List<Account> findAll() {
 		try(Connection con=ConnectionUtil.getConnection()){
@@ -23,13 +28,15 @@ public class AccountRepoImpl implements CrudRepo{
 			
 			while(result.next()) {
 				Account a= new Account(
+				result.getInt("accountId"),
+				result.getDouble("balance"),
+				readstatus.findById(result.getInt("statusId")),
+				readtype.findById(result.getInt("typeId"))
 						
-						
-						
-						
-						
-						);
+				);
+				list.add(a);
 			}
+			return list;
 			
 			
 		}catch(SQLException e) {
@@ -41,19 +48,19 @@ public class AccountRepoImpl implements CrudRepo{
 	}
 
 	@Override
-	public void insert(Object newObj) {
+	public void insert(Account newObj) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Object findById(int id) {
+	public Account findById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean update(Object updateObj) {
+	public boolean update(Account updateObj) {
 		// TODO Auto-generated method stub
 		return false;
 	}

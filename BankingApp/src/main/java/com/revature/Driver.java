@@ -2,10 +2,12 @@ package com.revature;
 
 import java.util.List;
 
+import com.revature.models.Account;
 import com.revature.models.AccountStatus;
 import com.revature.models.AccountType;
 import com.revature.models.Role;
 import com.revature.models.User;
+import com.revature.services.AccountService;
 import com.revature.services.AccountStatusService;
 import com.revature.services.AccountTypeService;
 import com.revature.services.RoleService;
@@ -16,6 +18,7 @@ public class Driver {
 	private static AccountStatusService ASService=new AccountStatusService();
 	private static AccountTypeService TService=new AccountTypeService();
 	private static UserService UService=new UserService();
+	private static AccountService AService=new AccountService();
 
 	public static void main(String[] args) {
 		
@@ -47,6 +50,13 @@ public class Driver {
 		
 		for(User U:userlist) {
 			System.out.println(U);
+		}
+		System.out.println("===========================================================");
+		
+		List<Account> accountlist=AService.findAll();
+		
+		for(Account A:accountlist) {
+			System.out.println(A);
 		}
 		
 		

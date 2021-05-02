@@ -20,6 +20,8 @@ public class AccountType implements Serializable{
 		this.typeId = typeId;
 		this.type = type;
 	}
+	
+	
 
 	public int getTypeId() {
 		return typeId;
