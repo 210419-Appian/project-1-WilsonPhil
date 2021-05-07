@@ -12,7 +12,7 @@ import com.revature.models.AccountStatus;
 import com.revature.models.AccountType;
 import com.revature.util.ConnectionUtil;
 
-public class AccountTypeRepoImpl implements ReadRepo<AccountType>{
+public class AccountTypeRepoImpl implements AccountTypeRepo{
 
 	@Override
 	public List findAll() {

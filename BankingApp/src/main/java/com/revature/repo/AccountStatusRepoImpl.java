@@ -8,12 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.models.Account;
 import com.revature.models.AccountStatus;
 
 import com.revature.util.ConnectionUtil;
 
-public class AccountStatusRepoImpl implements ReadRepo<AccountStatus>{
-
+public class AccountStatusRepoImpl implements AccountStatusRepo{
+	
+	
 	@Override
 	public List<AccountStatus> findAll() {
 try(Connection con=ConnectionUtil.getConnection()){
@@ -62,5 +64,7 @@ try(Connection con=ConnectionUtil.getConnection()){
 		}
 		return null;
 	}
+	
+
 
 }

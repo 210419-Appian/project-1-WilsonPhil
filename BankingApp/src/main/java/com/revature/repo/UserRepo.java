@@ -1,0 +1,16 @@
+package com.revature.repo;
+
+import java.util.List;
+
+import com.revature.models.Account;
+import com.revature.models.User;
+
+public interface UserRepo {
+	
+	public List<User>findAll();
+	User findById(int id);
+	boolean insert(User user);
+	boolean update(User user);
+	boolean deleteById(int id);
+
+}

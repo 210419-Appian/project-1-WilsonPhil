@@ -1,16 +1,16 @@
 package com.revature.services;
 
+
+
 import java.util.List;
 
 import com.revature.models.AccountType;
+import com.revature.repo.AccountTypeRepo;
 import com.revature.repo.AccountTypeRepoImpl;
-import com.revature.repo.ReadRepo;
-
-
 
 public class AccountTypeService {
 	
-	ReadRepo<AccountType> readRepo=new AccountTypeRepoImpl();
+	AccountTypeRepo readRepo=new AccountTypeRepoImpl();
 	
 	public List<AccountType> findAll(){
 		

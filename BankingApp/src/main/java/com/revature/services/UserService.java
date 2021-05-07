@@ -3,14 +3,12 @@ package com.revature.services;
 import java.util.List;
 
 import com.revature.models.User;
-import com.revature.repo.CrudRepo;
+import com.revature.repo.UserRepo;
 import com.revature.repo.UserRepoImpl;
-
-
 
 public class UserService {
 	
-	 CrudRepo<User> crudRepo=new UserRepoImpl();
+	 UserRepo crudRepo=new UserRepoImpl();
 		
 		public List<User> findAll(){
 			

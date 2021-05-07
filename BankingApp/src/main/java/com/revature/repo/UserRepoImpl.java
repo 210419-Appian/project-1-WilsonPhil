@@ -11,7 +11,7 @@ import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.util.ConnectionUtil;
 
-public class UserRepoImpl implements CrudRepo<User>{
+public class UserRepoImpl implements UserRepo{
 	
 	private static RoleRepo rolerepo=new RoleRepoImpl();
 	@Override
@@ -48,7 +48,8 @@ public class UserRepoImpl implements CrudRepo<User>{
 	}
 
 	@Override
-	public void insert(User newObj) {
+	public boolean insert(User newObj) {
+		return false;
 		// TODO Auto-generated method stub
 		
 	}

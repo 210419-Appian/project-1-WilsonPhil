@@ -1,16 +1,19 @@
 package com.revature.services;
 
+
+
 import java.util.List;
 
 import com.revature.models.AccountStatus;
+import com.revature.repo.AccountStatusRepo;
 import com.revature.repo.AccountStatusRepoImpl;
-import com.revature.repo.ReadRepo;
+
 
 
 
 public class AccountStatusService {
 	
-	 ReadRepo<AccountStatus> readRepo=new AccountStatusRepoImpl();
+	 AccountStatusRepo readRepo=new AccountStatusRepoImpl();
 		
 		public List<AccountStatus> findAll(){
 			
