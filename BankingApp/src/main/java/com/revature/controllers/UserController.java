@@ -5,44 +5,44 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.models.User;
+import com.revature.models.UserDTO;
 import com.revature.services.UserService;
 
 public class UserController {
-	private UserService us=new UserService();
-	private ObjectMapper om=new ObjectMapper();
-	
-	public void getAllAccounts(HttpServletResponse resp)
-	throws IOException, ServletException{
-		List<User> list=us.findAll();
-		
-		String json=om.writeValueAsString(list);
+	private UserService us = new UserService();
+	private ObjectMapper om = new ObjectMapper();
+
+	public void getAllAccounts(HttpServletResponse resp) throws IOException, ServletException {
+		List<User> list = us.findAll();
+
+		String json = om.writeValueAsString(list);
 		System.out.println(json);
-		PrintWriter pw=resp.getWriter();
+		PrintWriter pw = resp.getWriter();
 		pw.print(json);
 		resp.setStatus(200);
-		
+
 	}
-	
-	public void findById(HttpServletResponse resp, int id)
-	throws IOException{
-		User u=us.findById(id);
-		String json=om.writeValueAsString(u);
+
+	public void findById(HttpServletResponse resp, int id) throws IOException {
+		User u = us.findById(id);
+		String json = om.writeValueAsString(u);
 		System.out.println(json);
-		
-		PrintWriter pw=resp.getWriter();
+
+		PrintWriter pw = resp.getWriter();
 		pw.print(json);
 		resp.setStatus(200);
 	}
-	
-	public void putUser(HttpServletRequest req,HttpServletResponse resp)
-	throws IOException, ServletException{
+
+	public void putUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		BufferedReader reader = req.getReader();
 
 		StringBuilder sb = new StringBuilder();
@@ -58,13 +58,69 @@ public class UserController {
 
 		User u = om.readValue(body, User.class);
 
-		if(us.updateUser(u)) {
+		if (us.updateUser(u)) {
 			resp.setStatus(200);
-		}else {
+		} else {
 			resp.setStatus(400);
+		}
+
+	}
+	
+	public void login(HttpServletRequest req, HttpServletResponse resp) 
+	throws ServletException, IOException{
+		UserDTO u = new UserDTO();
+		User user=new User();
+		
+		u.username = req.getParameter("username");
+		u.password = req.getParameter("password");
+		
+		RequestDispatcher rd = null; 
+		PrintWriter out = resp.getWriter();
+		
+		if(u.username.equals(user.getUsername()) && u.password.equals(user.getPassword())) {
+			
+			HttpSession ses = req.getSession();  
+			ses.setAttribute("username", u.username);  
+			
+			rd = req.getRequestDispatcher("success");
+			rd.forward(req, resp);
+		} else {
+			rd = req.getRequestDispatcher("index.html");
+			rd.include(req, resp);
+			out.print("<span style='color:red; text-align:center'>Invalid Username/Password</span>");
+		}	
+	}
+	
+	public void logout(HttpServletRequest req, HttpServletResponse resp)
+	throws IOException, ServletException{
+		HttpSession ses=req.getSession(false);
+		
+		if(ses!=null) {
+			ses.invalidate();
+		}
+		resp.sendRedirect("http://www.google.com");
+		
+		
+	}
+
+	public void service(HttpServletRequest req, HttpServletResponse resp)
+	throws IOException,ServletException{
+		resp.setContentType("text/html");
+		PrintWriter out = resp.getWriter();
+		//gets a currently active session if one exists.
+		HttpSession ses = req.getSession(false);
+		
+		if (ses == null) {
+			out.print("<h1>YOU ARE NOT LOGGED IN!!!!!!!!</h1>");
+		} else {
+			String name = (String) ses.getAttribute("username");
+			out.print("<h2>Welcome "+name+", you are successfully logged in.</h2>");
+			out.print("<a href='logout'>Click here to log out.</a>");
 		}
 		
 	}
 	
-
+	
+	
+	
 }

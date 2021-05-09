@@ -18,7 +18,7 @@ public class AccountRepoImpl implements AccountRepo{
 	private static AccountStatusRepo readstatus=new AccountStatusRepoImpl();
 	private static AccountTypeRepo  readtype=new AccountTypeRepoImpl();
 	private static UserRepo userRepo=new UserRepoImpl();
-	private static RoleRepo roleRepo= new RoleRepoImpl();
+	//private static RoleRepo roleRepo= new RoleRepoImpl();
 	
 	@Override
 	public List<Account> findAll() {

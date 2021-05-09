@@ -1,12 +1,14 @@
 package com.revature.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.revature.controllers.AccountController;
 import com.revature.controllers.UserController;
@@ -21,6 +23,7 @@ public class FrontControllerServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		BaseURL = config.getInitParameter("BaseURL");
 	}
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,15 +54,15 @@ public class FrontControllerServlet extends HttpServlet {
 				accountControl.putAccount(req, resp);
 			} else if (req.getMethod().equals("DELETE") && sections.length == 2) {
 				accountControl.deleteAccount(resp, sections[1]);
-			}else if (req.getMethod().equals("PATCH") && sections.length == 3) {
-				if(sections[1].equals("withdraw")) {
-				accountControl.patchWithdrawAccount(req, resp);
-				}else if(sections[1].equals("deposit")) {
+			} else if (req.getMethod().equals("PATCH") && sections.length == 3) {
+				if (sections[1].equals("withdraw")) {
+					accountControl.patchWithdrawAccount(req, resp);
+				} else if (sections[1].equals("deposit")) {
 					accountControl.patchDepositAccount(req, resp);
 				}
 			}
 			break;
-		case"users":
+		case "users":
 			if (req.getMethod().equals("GET")) {
 				if (sections.length == 2) {
 					int id = Integer.parseInt(sections[1]);
@@ -67,10 +70,28 @@ public class FrontControllerServlet extends HttpServlet {
 				} else {
 					userControl.getAllAccounts(resp);
 				}
-			}else if(req.getMethod().equals("PUT")&& sections.length==2){	
+			} else if (req.getMethod().equals("PUT") && sections.length == 2) {
 				userControl.putUser(req, resp);
-				
+
 			}
+			break;
+		case "login":
+			if(req.getMethod().equals("POST")) {
+				userControl.login(req, resp);
+			}
+			break;
+		case"logout":
+			if(req.getMethod().equals("POST")) {
+				userControl.logout(req, resp);
+			}
+			break;
+		case"success":
+			if(req.getMethod().equals("GET")) {
+				userControl.service(req,resp);
+			}
+			
+			
+			
 		}
 
 	}
