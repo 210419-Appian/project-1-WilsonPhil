@@ -19,7 +19,7 @@
   	<servlet-class>com.revature.web.FrontControllerServlet</servlet-class>
   	<init-param>
   		<param-name>BaseURL</param-name>
-  		<param-value>/HelloFrontController/</param-value>
+  		<param-value>/BankingApp/</param-value>
   	</init-param>
   </servlet>
   

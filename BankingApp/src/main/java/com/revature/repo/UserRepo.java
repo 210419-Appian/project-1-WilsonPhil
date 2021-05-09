@@ -9,7 +9,6 @@ public interface UserRepo {
 	
 	public List<User>findAll();
 	User findById(int id);
-	boolean insert(User user);
 	boolean update(User user);
 	boolean deleteById(int id);
 

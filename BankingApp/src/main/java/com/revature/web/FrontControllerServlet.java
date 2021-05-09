@@ -24,7 +24,7 @@ public class FrontControllerServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("application/jason");
+		resp.setContentType("application/json");
 		resp.setStatus(404);
 
 		final String URL = req.getRequestURI().replace(BaseURL, "");
@@ -47,20 +47,30 @@ public class FrontControllerServlet extends HttpServlet {
 
 			} else if (req.getMethod().equals("POST")) {
 				accountControl.addAccount(req, resp);
+			} else if (req.getMethod().equals("PUT") && sections.length == 2) {
+				accountControl.putAccount(req, resp);
 			} else if (req.getMethod().equals("DELETE") && sections.length == 2) {
 				accountControl.deleteAccount(resp, sections[1]);
+			}else if (req.getMethod().equals("PATCH") && sections.length == 3) {
+				if(sections[1].equals("withdraw")) {
+				accountControl.patchWithdrawAccount(req, resp);
+				}else if(sections[1].equals("deposit")) {
+					accountControl.patchDepositAccount(req, resp);
+				}
 			}
 			break;
-//		case"users":
-//			if (req.getMethod().equals("GET")) {
-//				if (sections.length == 2) {
-//					homeControl.getHome(resp, sections[1]);
-//				} else {
-//					homeControl.getAllHomes(resp);
-//				}
-//			}else if(req.getMethod().equals("POST")) {
-//				homeControl.addHome(req, resp);
-//			}	
+		case"users":
+			if (req.getMethod().equals("GET")) {
+				if (sections.length == 2) {
+					int id = Integer.parseInt(sections[1]);
+					userControl.findById(resp, id);
+				} else {
+					userControl.getAllAccounts(resp);
+				}
+			}else if(req.getMethod().equals("PUT")&& sections.length==2){	
+				userControl.putUser(req, resp);
+				
+			}
 		}
 
 	}
