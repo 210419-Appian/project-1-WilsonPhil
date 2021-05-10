@@ -41,11 +41,15 @@ public class FrontControllerServlet extends HttpServlet {
 		switch (sections[0]) {
 		case "accounts":
 			if (req.getMethod().equals("GET")) {
-				if (sections.length == 2) {
+				if((sections.length==3)&&sections[1].equals("status")) {
+						int id = Integer.parseInt(sections[2]);
+						accountControl.AccountByStatus(req,resp, id);
+				}
+				else if (sections.length == 2) {
 					int id = Integer.parseInt(sections[1]);
-					accountControl.getAccount(resp, id);
+					accountControl.getAccount(req,resp, id);
 				} else {
-					accountControl.getAllAccounts(resp);
+					accountControl.getAllAccounts(req,resp);
 				}
 
 			} else if (req.getMethod().equals("POST")) {
@@ -66,13 +70,15 @@ public class FrontControllerServlet extends HttpServlet {
 			if (req.getMethod().equals("GET")) {
 				if (sections.length == 2) {
 					int id = Integer.parseInt(sections[1]);
-					userControl.findById(resp, id);
+					userControl.findById(req,resp, id);
 				} else {
-					userControl.getAllAccounts(resp);
+					userControl.getAllUsers(req,resp);
 				}
 			} else if (req.getMethod().equals("PUT") && sections.length == 2) {
 				userControl.putUser(req, resp);
 
+			}else if (req.getMethod().equals("POST")) {
+				userControl.addUser(req, resp);
 			}
 			break;
 		case "login":

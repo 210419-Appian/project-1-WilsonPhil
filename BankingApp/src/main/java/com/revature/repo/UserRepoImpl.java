@@ -181,6 +181,41 @@ public class UserRepoImpl implements UserRepo{
 		}
 		return null;
 	}
+	
+	
+	
+	@Override
+	public boolean addUser(User user) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			//There is no chance for sql injection with just an integer so this is safe. 
+			String sql = "INSERT INTO Users (username, password, firstName, lastName,email,roleId)"
+					+ "	VALUES (?, ?, ?, ?,?,?);";
+
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int index = 0;
+		
+			
+			statement.setString(++index, user.getUsername());
+			statement.setString(++index, user.getPassword());
+			statement.setString(++index, user.getFirstName());
+			statement.setString(++index, user.getLastNmae());
+			statement.setString(++index, user.getEmail());
+			statement.setInt(++index, user.getRole().getRoleId());
+			
+			
+			statement.execute();
+			return true;
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
 
 
 

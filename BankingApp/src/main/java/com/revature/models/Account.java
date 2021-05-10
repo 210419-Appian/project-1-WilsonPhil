@@ -2,10 +2,10 @@ package com.revature.models;
 
 import java.io.Serializable;
 
-public class Account implements Serializable{
+public class Account implements Serializable {
+	
 	
 	private static final long serialVersionUID = 1L;
-	   
 	
 	private int accountId;//primary key
 	private double balance;//not null

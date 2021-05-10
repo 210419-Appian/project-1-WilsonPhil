@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.models.UserDTO;
 import com.revature.repo.UserRepoImpl;
@@ -22,25 +22,73 @@ public class UserController {
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
 
-	public void getAllAccounts(HttpServletResponse resp) throws IOException, ServletException {
+	public void getAllUsers(HttpServletRequest req,HttpServletResponse resp) throws IOException, ServletException {
 		List<User> list = us.findAll();
 
 		String json = om.writeValueAsString(list);
 		System.out.println(json);
 		PrintWriter pw = resp.getWriter();
-		pw.print(json);
-		resp.setStatus(200);
+		
+		HttpSession ses=req.getSession();
+		String username=(String) ses.getAttribute("username");
+		UserRepoImpl userRepo= new UserRepoImpl();
+		User user=userRepo.findByUsername(username);
+		
+		if((user.getRole().getRoleId()==1)||(user.getRole().getRoleId()==2)) {
+				pw.print(json);
+				resp.setStatus(200);
+		}else {
+			pw.print(om.writeValueAsString("you do not have access with this user"));
+			resp.setStatus(401);
+		}
 
 	}
 
-	public void findById(HttpServletResponse resp, int id) throws IOException {
+	public void findById(HttpServletRequest req,HttpServletResponse resp, int id) throws IOException {
 		User u = us.findById(id);
 		String json = om.writeValueAsString(u);
 		System.out.println(json);
-
 		PrintWriter pw = resp.getWriter();
-		pw.print(json);
-		resp.setStatus(200);
+	
+		
+		HttpSession ses=req.getSession();
+		String username=(String) ses.getAttribute("username");
+		UserRepoImpl userRepo= new UserRepoImpl();
+		User user=userRepo.findByUsername(username);
+		
+		if((user.getRole().getRoleId()==1)||(user.getRole().getRoleId()==2)||u.getUserId()==id) {
+				pw.print(json);
+				resp.setStatus(200);
+		}else {
+			pw.print(om.writeValueAsString("you do not have access with this user"));
+			resp.setStatus(401);
+		}
+
+	}
+	
+	public void addUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+		StringBuilder sb = new StringBuilder();
+
+		BufferedReader reader = req.getReader();
+
+		String line = reader.readLine();
+
+		while (line != null) {
+			sb.append(line);
+			line=reader.readLine();
+		}
+
+		String body = new String(sb);
+
+		User u = om.readValue(body, User.class);
+		
+
+		if (us.addUser(u)) {
+			resp.setStatus(201);
+		} else {
+			resp.setStatus(400);
+		}
 	}
 	
 //	public void findByUsername(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -54,25 +102,34 @@ public class UserController {
 //	}
 
 	public void putUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		
+		HttpSession ses=req.getSession();
+		String username=(String) ses.getAttribute("username");
+		UserRepoImpl userRepo= new UserRepoImpl();
+		User user=userRepo.findByUsername(username);
+		
+		
 		BufferedReader reader = req.getReader();
-
 		StringBuilder sb = new StringBuilder();
-
 		String line = reader.readLine();
 
 		while (line != null) {
 			sb.append(line);
 			line = reader.readLine();
 		}
-
+		PrintWriter pw = resp.getWriter();
 		String body = new String(sb);
-
 		User u = om.readValue(body, User.class);
 
-		if (us.updateUser(u)) {
-			resp.setStatus(200);
-		} else {
-			resp.setStatus(400);
+		if((user.getRole().getRoleId()==1|| (user.getUserId()==u.getUserId()))) {
+			if (us.updateUser(u)) {
+				resp.setStatus(200);
+			} else {
+				resp.setStatus(400);
+			}
+		}else {
+			pw.print(om.writeValueAsString("you do not have access with this user"));
+			resp.setStatus(401);
 		}
 
 	}

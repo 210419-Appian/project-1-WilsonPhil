@@ -242,26 +242,26 @@ public class AccountRepoImpl implements AccountRepo{
 	}
 	
 	@Override
-	public Account findAccountByStatus(int id) {
+	public List<Account> findAccountByStatus(int id) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
 			String sql = "SELECT * FROM Account WHERE statusId = " + id + ";";
-
 			Statement statement = conn.createStatement();
-
 			ResultSet result = statement.executeQuery(sql);
-
-			Account a = null;
-
-			while (result.next()) {
-				a = new Account(result.getInt("accountId"),
-						result.getDouble("balance"),
-						readstatus.findById(result.getInt("statusId")),
-						readtype.findById(result.getInt("typeId")),
-						userRepo.findById(result.getInt("accountUser"))
-						);
-				return a;
+			
+			List<Account> list=new ArrayList<>();
+			
+			while(result.next()) {
+				Account a= new Account(
+				result.getInt("accountId"),
+				result.getDouble("balance"),
+				readstatus.findById(result.getInt("statusId")),
+				readtype.findById(result.getInt("typeId")),
+				userRepo.findById(result.getInt("accountUser"))
+				);
+				list.add(a);
 			}
+			return list;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

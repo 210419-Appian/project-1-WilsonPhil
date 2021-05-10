@@ -29,6 +29,12 @@ public class AccountService {
 			return ac.findById(id);
 		}
 		
+		public List<Account> findByStatus(int id) {
+			
+			List<Account> list= ac.findAccountByStatus(id);
+			return list;
+		}
+		
 		public boolean updateAccount(Account a) {
 			return ac.update(a);
 		}

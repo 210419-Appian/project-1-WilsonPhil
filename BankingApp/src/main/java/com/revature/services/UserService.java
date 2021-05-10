@@ -25,6 +25,10 @@ public class UserService {
 			
 		}
 		
+		public boolean addUser(User user) {
+			return ur.addUser(user);
+		}
+		
 		
 		public User findByUsername(String username) {
 			return ur.findByUsername(username);

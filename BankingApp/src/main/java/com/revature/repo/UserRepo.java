@@ -12,5 +12,6 @@ public interface UserRepo {
 	boolean update(User user);
 	User deleteById(int id);
 	User findByUsername(String username);
+	boolean addUser(User user);
 
 }

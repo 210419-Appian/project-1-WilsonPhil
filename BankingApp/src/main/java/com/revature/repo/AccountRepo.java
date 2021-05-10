@@ -11,7 +11,7 @@ public interface AccountRepo {
 	Account findById(int id);
 	public boolean addAccount(Account a);
 	public boolean addFullAccount(Account a);
-	Account findAccountByStatus(int id);
+	public List<Account> findAccountByStatus(int id);
 	boolean update(Account a);
 	boolean deleteAccount(int id);
 	boolean withdraw(Account a, double withdraw);
