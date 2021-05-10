@@ -81,6 +81,38 @@ public class UserRepoImpl implements UserRepo{
 		}
 		return null;
 	}
+	
+	@Override
+	public User findByUsername(String username) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			String sql = "SELECT * FROM Users WHERE username = " + username + ";";
+
+			Statement statement = conn.createStatement();
+
+			ResultSet result = statement.executeQuery(sql);
+
+			User u = null;
+
+			while (result.next()) {
+				u = new User(
+						result.getInt("userId"),
+						result.getString("username"),
+						result.getString("password"),
+						result.getString("firstName"),
+						result.getString("lastName"),
+						result.getString("email"),
+						rolerepo.findRoleById(result.getInt("roleId"))
+				
+						);
+				return u;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public boolean update(User u) {
@@ -118,9 +150,35 @@ public class UserRepoImpl implements UserRepo{
 	}
 
 	@Override
-	public boolean deleteById(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public  User deleteById(int id) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			String sql = "DELETE FROM Users WHERE userId = " + id + ";";
+
+			Statement statement = conn.createStatement();
+
+			ResultSet result = statement.executeQuery(sql);
+
+			User u = null;
+
+			while (result.next()) {
+				u = new User(
+						result.getInt("userId"),
+						result.getString("username"),
+						result.getString("password"),
+						result.getString("firstName"),
+						result.getString("lastName"),
+						result.getString("email"),
+						rolerepo.findRoleById(result.getInt("roleId"))
+				
+						);
+				return u;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

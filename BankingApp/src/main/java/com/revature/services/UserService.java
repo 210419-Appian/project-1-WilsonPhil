@@ -3,6 +3,7 @@ package com.revature.services;
 import java.util.List;
 
 import com.revature.models.User;
+import com.revature.models.UserDTO;
 import com.revature.repo.UserRepo;
 import com.revature.repo.UserRepoImpl;
 
@@ -23,8 +24,24 @@ public class UserService {
 			return ur.findById(id);
 			
 		}
+		
+		
+		public User findByUsername(String username) {
+			return ur.findByUsername(username);
+			
+		}
 		public boolean updateUser(User u) {
 			return ur.update(u);
+		}
+
+		public boolean loginVerification(UserDTO u) {
+			UserRepoImpl userRepo=new UserRepoImpl();
+			User userRequest=userRepo.findByUsername(u.username);
+			
+			if((userRequest.getPassword()!=null )&&(u.password.equals(userRequest.getPassword()))){
+				return true;
+			}
+			return false;
 		}
 		
 		

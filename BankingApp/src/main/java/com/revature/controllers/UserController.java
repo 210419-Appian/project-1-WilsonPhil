@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.models.User;
 import com.revature.models.UserDTO;
+import com.revature.repo.UserRepoImpl;
 import com.revature.services.UserService;
 
 public class UserController {
@@ -41,6 +42,16 @@ public class UserController {
 		pw.print(json);
 		resp.setStatus(200);
 	}
+	
+//	public void findByUsername(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//		User u = us.findByUsername();
+//		String json = om.writeValueAsString(u);
+//		System.out.println(json);
+//
+//		PrintWriter pw = resp.getWriter();
+//		pw.print(json);
+//		resp.setStatus(200);
+//	}
 
 	public void putUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		BufferedReader reader = req.getReader();
@@ -68,27 +79,36 @@ public class UserController {
 	
 	public void login(HttpServletRequest req, HttpServletResponse resp) 
 	throws ServletException, IOException{
-		UserDTO u = new UserDTO();
-		User user=new User();
+		UserDTO u = new UserDTO(); 
+		UserRepoImpl urepo=new UserRepoImpl(); 
+	
 		
-		u.username = req.getParameter("username");
-		u.password = req.getParameter("password");
 		
-		RequestDispatcher rd = null; 
+		BufferedReader reader = req.getReader();
+		StringBuilder sb = new StringBuilder();
+		String line = reader.readLine();
+		while (line != null) {
+			sb.append(line);
+			line = reader.readLine();
+
+		}
+		
+		String body = new String(sb); 
+		u = om.readValue(body, UserDTO.class); 
 		PrintWriter out = resp.getWriter();
 		
-		if(u.username.equals(user.getUsername()) && u.password.equals(user.getPassword())) {
+		if(us.loginVerification(u)) {
+			HttpSession ses=req.getSession();
+			ses.setAttribute("username", u.username);
+			resp.setStatus(200);
 			
-			HttpSession ses = req.getSession();  
-			ses.setAttribute("username", u.username);  
+		}else {
+			resp.setStatus(400);
 			
-			rd = req.getRequestDispatcher("success");
-			rd.forward(req, resp);
-		} else {
-			rd = req.getRequestDispatcher("index.html");
-			rd.include(req, resp);
-			out.print("<span style='color:red; text-align:center'>Invalid Username/Password</span>");
-		}	
+		}
+		
+	
+			
 	}
 	
 	public void logout(HttpServletRequest req, HttpServletResponse resp)

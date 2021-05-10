@@ -10,6 +10,7 @@ public interface UserRepo {
 	public List<User>findAll();
 	User findById(int id);
 	boolean update(User user);
-	boolean deleteById(int id);
+	User deleteById(int id);
+	User findByUsername(String username);
 
 }

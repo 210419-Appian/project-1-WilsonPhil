@@ -89,6 +89,8 @@ public class FrontControllerServlet extends HttpServlet {
 			if(req.getMethod().equals("GET")) {
 				userControl.service(req,resp);
 			}
+			break;
+		
 			
 			
 			
