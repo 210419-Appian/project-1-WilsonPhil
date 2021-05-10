@@ -157,7 +157,7 @@ public class AccountController {
 		String body = new String(sb);
 
 		Account a = om.readValue(body, Account.class);
-
+		System.out.println(a);
 		if(as.withdraw(a)) {
 			resp.setStatus(200);
 		}else {

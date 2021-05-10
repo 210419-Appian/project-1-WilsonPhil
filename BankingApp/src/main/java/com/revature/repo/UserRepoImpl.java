@@ -85,12 +85,11 @@ public class UserRepoImpl implements UserRepo{
 	@Override
 	public User findByUsername(String username) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM Users WHERE username = ?;"; 
 
-			String sql = "SELECT * FROM Users WHERE username = " + username + ";";
-
-			Statement statement = conn.createStatement();
-
-			ResultSet result = statement.executeQuery(sql);
+            PreparedStatement statement = conn.prepareStatement(sql); 
+            statement.setString(1, username); 
+            ResultSet result = statement.executeQuery();
 
 			User u = null;
 
@@ -105,8 +104,10 @@ public class UserRepoImpl implements UserRepo{
 						rolerepo.findRoleById(result.getInt("roleId"))
 				
 						);
-				return u;
+				
 			}
+			return u;
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

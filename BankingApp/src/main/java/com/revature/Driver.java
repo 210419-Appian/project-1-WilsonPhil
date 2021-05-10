@@ -7,6 +7,7 @@ import com.revature.models.AccountStatus;
 import com.revature.models.AccountType;
 import com.revature.models.Role;
 import com.revature.models.User;
+import com.revature.repo.UserRepoImpl;
 import com.revature.services.AccountService;
 import com.revature.services.AccountStatusService;
 import com.revature.services.AccountTypeService;
@@ -58,6 +59,10 @@ public class Driver {
 		for(Account A:accountlist) {
 			System.out.println(A);
 		}
+		
+		UserRepoImpl uR=new UserRepoImpl();
+		System.out.println(uR.findByUsername("philipwilson"));
+		
 		
 		
 	}

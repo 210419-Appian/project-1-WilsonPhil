@@ -37,6 +37,8 @@ public class UserService {
 		public boolean loginVerification(UserDTO u) {
 			UserRepoImpl userRepo=new UserRepoImpl();
 			User userRequest=userRepo.findByUsername(u.username);
+			System.out.println(u);
+			System.out.println(userRequest);
 			
 			if((userRequest.getPassword()!=null )&&(u.password.equals(userRequest.getPassword()))){
 				return true;

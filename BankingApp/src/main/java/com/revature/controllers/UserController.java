@@ -113,12 +113,26 @@ public class UserController {
 	
 	public void logout(HttpServletRequest req, HttpServletResponse resp)
 	throws IOException, ServletException{
-		HttpSession ses=req.getSession(false);
+		if(req.getSession(false)==null) {
+			return;
+		}
+		//this gets my session
+		HttpSession ses=req.getSession(); 
 		
+		//writing my message
+		PrintWriter out=resp.getWriter();
+		//invalidating the session to logout
 		if(ses!=null) {
+			out.print("<span style='color:Blue; text-align:center'>You Logged out!</span>");
+			resp.setStatus(200);
 			ses.invalidate();
+		}else {
+			out.print("<span style='color:Red; text-align:center'>Failed to Logout</span>");
+			resp.setStatus(400);
+			
 		}
 		resp.sendRedirect("http://www.google.com");
+	
 		
 		
 	}
